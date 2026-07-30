@@ -1,0 +1,37 @@
+using NUnit.Framework;
+using UnityEngine;
+using Tempest.World;
+using Tempest.Gameplay.Faction;
+
+public class WeatherAndFactionIntegrationTest
+{
+    private GameObject _weatherGo;
+    private WeatherSystem _weatherSystem;
+    private GameObject _factionGo;
+    private FactionManager _factionManager;
+
+    [SetUp]
+    public void Setup()
+    {
+        _weatherGo = new GameObject("Weather");
+        _weatherSystem = _weatherGo.AddComponent<WeatherSystem>();
+
+        _factionGo = new GameObject("Faction");
+        _factionManager = _factionGo.AddComponent<FactionManager>();
+    }
+
+    [Test]
+    public void WeatherAndFaction_CanCoexist()
+    {
+        _weatherSystem.SetWeather(WeatherType.HeavyStorm);
+        _factionManager.ChangeReputation(FactionType.Veil, 20);
+        Assert.IsNotNull(_weatherSystem);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        Object.DestroyImmediate(_weatherGo);
+        Object.DestroyImmediate(_factionGo);
+    }
+}
